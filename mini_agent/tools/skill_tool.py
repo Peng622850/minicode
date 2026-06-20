@@ -56,29 +56,20 @@ class GetSkillTool(Tool):
 
 def create_skill_tools(
     skills_dir: str = "./skills",
+    use_router: bool = True,
 ) -> tuple[List[Tool], Optional[SkillLoader]]:
-    """
-    Create skill tool for Progressive Disclosure
+    from .skill_router import SkillRouter
 
-    Only provides get_skill tool - the agent uses metadata in system prompt
-    to know what skills are available, then loads them on-demand.
-
-    Args:
-        skills_dir: Skills directory path
-
-    Returns:
-        Tuple of (list of tools, skill loader)
-    """
-    # Create skill loader
     loader = SkillLoader(skills_dir)
-
-    # Discover and load skills
     skills = loader.discover_skills()
     print(f"✅ Discovered {len(skills)} Claude Skills")
 
-    # Create only the get_skill tool (Progressive Disclosure Level 2)
-    tools = [
-        GetSkillTool(loader),
-    ]
+    if use_router and skills:
+        router = SkillRouter(loader, top_k=3)
+        router.build_index()
+        loader.router = router
+    else:
+        loader.router = None
 
+    tools = [GetSkillTool(loader)]
     return tools, loader

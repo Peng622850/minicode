@@ -588,17 +588,25 @@ async def run_agent(workspace_dir: Path, task: str = None):
 
     # 6. Inject Skills Metadata into System Prompt (Progressive Disclosure - Level 1)
     if skill_loader:
-        skills_metadata = skill_loader.get_skills_metadata_prompt()
-        if skills_metadata:
-            # Replace placeholder with actual metadata
-            system_prompt = system_prompt.replace("{SKILLS_METADATA}", skills_metadata)
-            print(f"{Colors.GREEN}✅ Injected {len(skill_loader.loaded_skills)} skills metadata into system prompt{Colors.RESET}")
+        router = getattr(skill_loader, 'router', None)
+        if router:
+            # 动态路由模式：先用全量 prompt，运行时按 query 动态召回
+            skills_metadata = router.build_full_prompt()
+            # 把 router 挂到 agent 上，供后续动态更新用
+            agent_skill_router = router
         else:
-            # Remove placeholder if no skills
+            skills_metadata = skill_loader.get_skills_metadata_prompt()
+            agent_skill_router = None
+
+        if skills_metadata:
+            system_prompt = system_prompt.replace("{SKILLS_METADATA}", skills_metadata)
+            print(
+                f"{Colors.GREEN}✅ Injected {len(skill_loader.loaded_skills)} skills metadata into system prompt{Colors.RESET}")
+        else:
             system_prompt = system_prompt.replace("{SKILLS_METADATA}", "")
     else:
-        # Remove placeholder if skills not enabled
         system_prompt = system_prompt.replace("{SKILLS_METADATA}", "")
+        agent_skill_router = None
 
     # 7. Create Agent
     agent = Agent(
@@ -747,6 +755,21 @@ async def run_agent(workspace_dir: Path, task: str = None):
             print(
                 f"\n{Colors.BRIGHT_BLUE}Agent{Colors.RESET} {Colors.DIM}›{Colors.RESET} {Colors.DIM}Thinking... (Esc to cancel){Colors.RESET}\n"
             )
+            # 动态更新 system prompt 中的 Skill 元信息
+            if agent_skill_router:
+                top_skills = agent_skill_router.retrieve(user_input, top_k=3)
+                print(f"🎯 Skill Router 召回: {[m.name for m, _ in top_skills]}")
+                skill_section = agent_skill_router.build_prompt(top_skills)
+                # 更新 system message（messages[0]）
+                current_system = agent.messages[0].content
+                import re
+                new_system = re.sub(
+                    r'## Available Skills.*?(?=\n##|\Z)',
+                    skill_section + '\n',
+                    current_system,
+                    flags=re.DOTALL
+                )
+                agent.messages[0].content = new_system
             agent.add_user_message(user_input)
 
             # Create cancellation event
