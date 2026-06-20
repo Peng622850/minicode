@@ -38,6 +38,7 @@ from mini_agent.tools.mcp_loader import cleanup_mcp_connections, load_mcp_tools_
 from mini_agent.tools.note_tool import SessionNoteTool
 from mini_agent.tools.skill_tool import create_skill_tools
 from mini_agent.utils import calculate_display_width
+from mini_agent.tools.memory_system import MemorySystem
 
 
 # ANSI color codes
@@ -617,6 +618,16 @@ async def run_agent(workspace_dir: Path, task: str = None):
         workspace_dir=str(workspace_dir),
     )
 
+    # 加载长期记忆
+    memory_system = MemorySystem()
+    agent.memory_system = memory_system
+
+    # 注入记忆到 system prompt
+    memory_prompt = memory_system.build_prompt()
+    if memory_prompt:
+        agent.messages[0].content += f"\n\n{memory_prompt}"
+        print(f"{Colors.GREEN}✅ 已加载长期记忆{Colors.RESET}")
+
     # 8. Display welcome information
     if not task:
         print_banner()
@@ -760,7 +771,6 @@ async def run_agent(workspace_dir: Path, task: str = None):
                 top_skills = agent_skill_router.retrieve(user_input, top_k=3)
                 print(f"🎯 Skill Router 召回: {[m.name for m, _ in top_skills]}")
                 skill_section = agent_skill_router.build_prompt(top_skills)
-                # 更新 system message（messages[0]）
                 current_system = agent.messages[0].content
                 import re
                 new_system = re.sub(
@@ -770,6 +780,23 @@ async def run_agent(workspace_dir: Path, task: str = None):
                     flags=re.DOTALL
                 )
                 agent.messages[0].content = new_system
+
+            # 动态召回相关记忆
+            if memory_system.memories:
+                memory_prompt = memory_system.build_prompt_for_query(user_input)
+                if memory_prompt:
+                    current_system = agent.messages[0].content
+                    import re
+                    new_system = re.sub(
+                        r'## 长期记忆.*?(?=\n##|\Z)',
+                        memory_prompt + '\n',
+                        current_system,
+                        flags=re.DOTALL
+                    )
+                    if new_system == current_system:
+                        new_system = current_system + f"\n\n{memory_prompt}"
+                    agent.messages[0].content = new_system
+
             agent.add_user_message(user_input)
 
             # Create cancellation event

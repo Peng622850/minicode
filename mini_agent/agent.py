@@ -82,6 +82,7 @@ class Agent:
         self.api_total_tokens: int = 0
         # Flag to skip token check right after summary (avoid consecutive triggers)
         self._skip_next_token_check: bool = False
+        self.memory_system = None  # 由 cli.py 注入
 
     def add_user_message(self, content: str):
         """Add a user message to history."""
@@ -415,9 +416,13 @@ Requirements:
 
             # Check if task is complete (no tool calls)
             if not response.tool_calls:
+                # 任务结束，触发记忆提炼
+                if self.memory_system:
+                    await self.memory_system.distill_and_save(self.messages, self.llm)
                 step_elapsed = perf_counter() - step_start_time
                 total_elapsed = perf_counter() - run_start_time
-                print(f"\n{Colors.DIM}⏱️  Step {step + 1} completed in {step_elapsed:.2f}s (total: {total_elapsed:.2f}s){Colors.RESET}")
+                print(
+                    f"\n{Colors.DIM}⏱️  Step {step + 1} completed in {step_elapsed:.2f}s (total: {total_elapsed:.2f}s){Colors.RESET}")
                 return response.content
 
             # Check for cancellation before executing tools
