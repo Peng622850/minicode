@@ -775,7 +775,7 @@ async def run_agent(workspace_dir: Path, task: str = None):
                 import re
                 new_system = re.sub(
                     r'## Available Skills.*?(?=\n##|\Z)',
-                    skill_section + '\n',
+                    lambda m: skill_section + '\n',
                     current_system,
                     flags=re.DOTALL
                 )
@@ -789,7 +789,7 @@ async def run_agent(workspace_dir: Path, task: str = None):
                     import re
                     new_system = re.sub(
                         r'## 长期记忆.*?(?=\n##|\Z)',
-                        memory_prompt + '\n',
+                        lambda m: memory_prompt + '\n',
                         current_system,
                         flags=re.DOTALL
                     )

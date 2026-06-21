@@ -84,6 +84,10 @@ class Agent:
         self._skip_next_token_check: bool = False
         self.memory_system = None  # 由 cli.py 注入
 
+        from .tools.safety import SafetyGuard
+        print("safety module loaded ok")
+        self.safety_guard = SafetyGuard()
+
     def add_user_message(self, content: str):
         """Add a user message to history."""
         self.messages.append(Message(role="user", content=content))
@@ -463,20 +467,27 @@ Requirements:
                         error=f"Unknown tool: {function_name}",
                     )
                 else:
-                    try:
-                        tool = self.tools[function_name]
-                        result = await tool.execute(**arguments)
-                    except Exception as e:
-                        # Catch all exceptions during tool execution, convert to failed ToolResult
-                        import traceback
-
-                        error_detail = f"{type(e).__name__}: {str(e)}"
-                        error_trace = traceback.format_exc()
+                    # 安全审批
+                    allowed, reason = self.safety_guard.check(function_name, arguments)
+                    if not allowed:
                         result = ToolResult(
                             success=False,
                             content="",
-                            error=f"Tool execution failed: {error_detail}\n\nTraceback:\n{error_trace}",
+                            error=f"工具调用被安全审批阻断: {reason}",
                         )
+                    else:
+                        try:
+                            tool = self.tools[function_name]
+                            result = await tool.execute(**arguments)
+                        except Exception as e:
+                            import traceback
+                            error_detail = f"{type(e).__name__}: {str(e)}"
+                            error_trace = traceback.format_exc()
+                            result = ToolResult(
+                                success=False,
+                                content="",
+                                error=f"Tool execution failed: {error_detail}\n\nTraceback:\n{error_trace}",
+                            )
 
                 # Log tool execution result
                 self.logger.log_tool_result(
@@ -497,9 +508,26 @@ Requirements:
                     print(f"{Colors.BRIGHT_RED}✗ Error:{Colors.RESET} {Colors.RED}{result.error}{Colors.RESET}")
 
                 # Add tool result message
+                # Add tool result message（大输出外置化压缩）
+                tool_content = result.content if result.success else f"Error: {result.error}"
+
+                # 超过 2000 字符的工具输出做截断压缩，保留头尾
+                TOOL_OUTPUT_LIMIT = 2000
+                if len(tool_content) > TOOL_OUTPUT_LIMIT:
+                    original_len = len(tool_content)
+                    head = tool_content[:800]
+                    tail = tool_content[-400:]
+                    tool_content = (
+                        f"{head}\n"
+                        f"... [输出过长，已压缩。原始长度: {original_len} 字符，"
+                        f"节省: {original_len - TOOL_OUTPUT_LIMIT} 字符] ...\n"
+                        f"{tail}"
+                    )
+                    print(f"{Colors.DIM}   📦 工具输出压缩: {original_len} → {len(tool_content)} 字符{Colors.RESET}")
+
                 tool_msg = Message(
                     role="tool",
-                    content=result.content if result.success else f"Error: {result.error}",
+                    content=tool_content,
                     tool_call_id=tool_call_id,
                     name=function_name,
                 )
