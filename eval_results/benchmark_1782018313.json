@@ -1,0 +1,219 @@
+{
+  "summary": {
+    "total": 20,
+    "passed": 18,
+    "failed": 2,
+    "pass_rate": 0.9,
+    "avg_latency": 7.3766239285469055,
+    "avg_tool_rounds": 1.4
+  },
+  "category_stats": {
+    "文件操作": {
+      "total": 5,
+      "passed": 4,
+      "pass_rate": 0.8
+    },
+    "代码执行": {
+      "total": 5,
+      "passed": 4,
+      "pass_rate": 0.8
+    },
+    "系统操作": {
+      "total": 4,
+      "passed": 4,
+      "pass_rate": 1.0
+    },
+    "信息查询": {
+      "total": 3,
+      "passed": 3,
+      "pass_rate": 1.0
+    },
+    "复合任务": {
+      "total": 3,
+      "passed": 3,
+      "pass_rate": 1.0
+    }
+  },
+  "results": [
+    {
+      "task_id": "file_01",
+      "category": "文件操作",
+      "task": "创建一个名为 hello.txt 的文件，内容为 hello world",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 4.222227334976196,
+      "error": null
+    },
+    {
+      "task_id": "file_02",
+      "category": "文件操作",
+      "task": "读取 hello.txt 文件的内容并告诉我",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 4.700289011001587,
+      "error": null
+    },
+    {
+      "task_id": "file_03",
+      "category": "文件操作",
+      "task": "把 hello.txt 的内容修改为 goodbye world",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 6.169375896453857,
+      "error": null
+    },
+    {
+      "task_id": "file_04",
+      "category": "文件操作",
+      "task": "创建一个 info.json 文件，包含 name 和 age 两个字段",
+      "passed": false,
+      "tool_rounds": 1,
+      "latency": 8.896817445755005,
+      "error": null
+    },
+    {
+      "task_id": "file_05",
+      "category": "文件操作",
+      "task": "统计当前目录下有多少个 Python 文件",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 7.384610176086426,
+      "error": null
+    },
+    {
+      "task_id": "code_01",
+      "category": "代码执行",
+      "task": "写一个 hello.py 脚本打印 Hello World 并运行",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 6.553298234939575,
+      "error": null
+    },
+    {
+      "task_id": "code_02",
+      "category": "代码执行",
+      "task": "用 Python 计算 1+1 并打印结果",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 3.3357064723968506,
+      "error": null
+    },
+    {
+      "task_id": "code_03",
+      "category": "代码执行",
+      "task": "写一个计算斐波那契数列前10项的 Python 脚本并运行",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 10.82145881652832,
+      "error": null
+    },
+    {
+      "task_id": "code_04",
+      "category": "代码执行",
+      "task": "查看当前 Python 版本",
+      "passed": false,
+      "tool_rounds": 1,
+      "latency": 3.365432024002075,
+      "error": null
+    },
+    {
+      "task_id": "code_05",
+      "category": "代码执行",
+      "task": "用 Python 生成一个1到100之间的随机数并打印",
+      "passed": true,
+      "tool_rounds": 0,
+      "latency": 3.650764226913452,
+      "error": null
+    },
+    {
+      "task_id": "sys_01",
+      "category": "系统操作",
+      "task": "列出当前目录下的所有文件和文件夹",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 4.389312505722046,
+      "error": null
+    },
+    {
+      "task_id": "sys_02",
+      "category": "系统操作",
+      "task": "查看当前工作目录的完整路径",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 3.49594783782959,
+      "error": null
+    },
+    {
+      "task_id": "sys_03",
+      "category": "系统操作",
+      "task": "查看当前系统时间",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 7.4230475425720215,
+      "error": null
+    },
+    {
+      "task_id": "sys_04",
+      "category": "系统操作",
+      "task": "在当前目录下创建一个名为 test_dir 的子目录",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 3.893454074859619,
+      "error": null
+    },
+    {
+      "task_id": "info_01",
+      "category": "信息查询",
+      "task": "查看当前环境安装了哪些 Python 包",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 13.944085836410522,
+      "error": null
+    },
+    {
+      "task_id": "info_02",
+      "category": "信息查询",
+      "task": "查看 uv 的版本号",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 3.480086088180542,
+      "error": null
+    },
+    {
+      "task_id": "info_03",
+      "category": "信息查询",
+      "task": "查看当前 git 仓库在哪个分支",
+      "passed": true,
+      "tool_rounds": 1,
+      "latency": 3.1471545696258545,
+      "error": null
+    },
+    {
+      "task_id": "complex_01",
+      "category": "复合任务",
+      "task": "写一个 Python 脚本计算100以内所有素数并运行",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 15.661049842834473,
+      "error": null
+    },
+    {
+      "task_id": "complex_02",
+      "category": "复合任务",
+      "task": "创建一个名为 output 的目录，并在里面创建 a.txt 和 b.txt 两个文件",
+      "passed": true,
+      "tool_rounds": 2,
+      "latency": 8.327725648880005,
+      "error": null
+    },
+    {
+      "task_id": "complex_03",
+      "category": "复合任务",
+      "task": "创建一个 data.json 文件写入数据，再写一个 Python 脚本读取并打印该文件内容，最后运行脚本",
+      "passed": true,
+      "tool_rounds": 3,
+      "latency": 24.670634984970093,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "file_01",
+    "task": "创建一个名为 hello.txt 的文件，内容为 hello world",
+    "keywords": ["hello world", "hello.txt", "成功", "created", "wrote"],
+    "category": "文件操作"
+  },
+  {
+    "id": "file_02",
+    "task": "读取 hello.txt 文件的内容并告诉我",
+    "keywords": ["hello world", "内容", "read"],
+    "category": "文件操作"
+  },
+  {
+    "id": "file_03",
+    "task": "把 hello.txt 的内容修改为 goodbye world",
+    "keywords": ["goodbye world", "修改", "成功", "edited"],
+    "category": "文件操作"
+  },
+  {
+    "id": "file_04",
+    "task": "创建一个 info.json 文件，包含 name 和 age 两个字段",
+    "keywords": ["name", "age", "json", "成功", "created"],
+    "category": "文件操作"
+  },
+  {
+    "id": "file_05",
+    "task": "统计当前目录下有多少个 Python 文件",
+    "keywords": [".py", "个", "文件", "python"],
+    "category": "文件操作"
+  },
+  {
+    "id": "code_01",
+    "task": "写一个 hello.py 脚本打印 Hello World 并运行",
+    "keywords": ["Hello World", "运行", "成功", "output"],
+    "category": "代码执行"
+  },
+  {
+    "id": "code_02",
+    "task": "用 Python 计算 1+1 并打印结果",
+    "keywords": ["2", "结果", "python"],
+    "category": "代码执行"
+  },
+  {
+    "id": "code_03",
+    "task": "写一个计算斐波那契数列前10项的 Python 脚本并运行",
+    "keywords": ["1", "1", "2", "3", "5", "8", "斐波那契"],
+    "category": "代码执行"
+  },
+  {
+    "id": "code_04",
+    "task": "查看当前 Python 版本",
+    "keywords": ["python", "3.", "version"],
+    "category": "代码执行"
+  },
+  {
+    "id": "code_05",
+    "task": "用 Python 生成一个1到100之间的随机数并打印",
+    "keywords": ["随机", "数字", "python"],
+    "category": "代码执行"
+  },
+  {
+    "id": "sys_01",
+    "task": "列出当前目录下的所有文件和文件夹",
+    "keywords": ["文件", "目录", "列表"],
+    "category": "系统操作"
+  },
+  {
+    "id": "sys_02",
+    "task": "查看当前工作目录的完整路径",
+    "keywords": ["路径", "mini", "agent", "\\"],
+    "category": "系统操作"
+  },
+  {
+    "id": "sys_03",
+    "task": "查看当前系统时间",
+    "keywords": ["时间", "2026", ":"],
+    "category": "系统操作"
+  },
+  {
+    "id": "sys_04",
+    "task": "在当前目录下创建一个名为 test_dir 的子目录",
+    "keywords": ["test_dir", "创建", "成功", "directory"],
+    "category": "系统操作"
+  },
+  {
+    "id": "info_01",
+    "task": "查看当前环境安装了哪些 Python 包",
+    "keywords": ["package", "pip", "installed", "版本"],
+    "category": "信息查询"
+  },
+  {
+    "id": "info_02",
+    "task": "查看 uv 的版本号",
+    "keywords": ["uv", "0.", "version"],
+    "category": "信息查询"
+  },
+  {
+    "id": "info_03",
+    "task": "查看当前 git 仓库在哪个分支",
+    "keywords": ["main", "master", "branch", "分支"],
+    "category": "信息查询"
+  },
+  {
+    "id": "complex_01",
+    "task": "写一个 Python 脚本计算100以内所有素数并运行",
+    "keywords": ["2", "3", "5", "7", "11", "97", "素数"],
+    "category": "复合任务"
+  },
+  {
+    "id": "complex_02",
+    "task": "创建一个名为 output 的目录，并在里面创建 a.txt 和 b.txt 两个文件",
+    "keywords": ["output", "a.txt", "b.txt", "成功", "created"],
+    "category": "复合任务"
+  },
+  {
+    "id": "complex_03",
+    "task": "创建一个 data.json 文件写入数据，再写一个 Python 脚本读取并打印该文件内容，最后运行脚本",
+    "keywords": ["data.json", "读取", "打印", "成功"],
+    "category": "复合任务"
+  }
+]
